@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# emfetch v1.0.0
+# Used to pre-fetch the distfiles for any updates that emupdate would like to apply. 
+
+/usr/bin/emerge --backtrack=100 --fetchonly --changed-deps --update --deep --newuse --changed-use --keep-going @world
+

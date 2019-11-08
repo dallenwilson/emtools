@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# emsync v1.0.0
+# Used to sync the main gentoo tree and anything else that's available.
+
+/usr/sbin/emaint sync --auto
+/usr/bin/layman -s ALL
+/usr/bin/eix-update
+

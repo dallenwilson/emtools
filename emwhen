@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# emwhen v1.0.0
+# Displays the date and time of the last sync of the main gentoo repo.
+
+date -r /usr/portage/metadata/timestamp

@@ -1,0 +1,31 @@
+#!/bin/bash 
+
+# emtidy v1.0.0
+# Lists packages that can be removed from the world file.
+# Also uses eix to list packages that can be uninstalled.
+
+# Largely based on the script available at the gentoo wiki:
+# https://wiki.gentoo.org/wiki/Selected-packages_set_(Portage)
+
+cd /root
+
+rm world.tidy
+rm eix.tidy
+
+while read i ; do 
+        if [ -n "$(qdepends -Q $i)" ]; then 
+                echo '' ; echo 'checking '$i ; 
+                if [ -n "$(emerge -p --quiet --depclean $i)" ]; then 
+                        echo $i' needs to stay in @world' 
+                else 
+                        echo $i' can be deselected' 
+                        echo $i >> world.tidy 
+                fi 
+        fi 
+done < /var/lib/portage/world
+
+eix-test-obsolete >> /root/eix.tidy
+
+echo "Review /root/world.tidy for a list of packages that can be removed from the world file."
+echo "Review /root/eix.tidy for a list of packages that are obsolete."
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# emupdate v1.0.0
+# To be used after emsync. Updates the system and cleans up the mess.
+
+
+#source /etc/portage/package.excludes
+#/usr/bin/emerge --exclude "$NOTOUCH" --update --ask --deep --newuse --keep-going --changed-use @world
+/usr/bin/emerge --backtrack=100 --ask --changed-deps --update --deep --newuse --changed-use --keep-going @world
+
+/usr/bin/emerge @preserved-rebuild
+/usr/bin/emerge --ask --depclean
+/usr/bin/eclean-dist --deep
+

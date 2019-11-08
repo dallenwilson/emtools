@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# emconfigkernel v1.0.0
+# Used to create a new kernel config based on the current config.
+
+# Move to kernel source
+cd /usr/src/linux
+
+if [ -f /usr/src/linux/.config ]; then
+	rm /usr/src/linux/.config
+fi
+
+# Get old source
+/bin/zcat /proc/config.gz > /usr/src/linux/.config
+
+# Update config
+/usr/bin/make oldconfig

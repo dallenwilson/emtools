@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# emmakekernel v1.0.0
+# Used to build a new kernel and all associated steps in installing it,
+# as well as rebuilding any installed modules.
+
+# Move to kernel source
+cd /usr/src/linux
+
+# Make kernel and modules
+/usr/bin/make modules_prepare
+/usr/bin/make -j8
+/usr/bin/make modules_install
+
+# Install kernel to /boot
+/usr/bin/make install
+
+# Build initramfs and install to /boot
+/usr/bin/genkernel --install initramfs
+
+# Update the grub
+/usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
+
+# Backup /boot to /mnt/boot-backup
+/usr/bin/rsync -av /boot/ /mnt/boot-backup/
+
+# Rebuild other modules
+emerge @module-rebuild
+#emerge sys-kernel/linux-firmware
