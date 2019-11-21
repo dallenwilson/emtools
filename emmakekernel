@@ -4,12 +4,14 @@
 # Used to build a new kernel and all associated steps in installing it,
 # as well as rebuilding any installed modules.
 
+source /etc/emtools.conf
+
 # Move to kernel source
 cd /usr/src/linux
 
 # Make kernel and modules
 /usr/bin/make modules_prepare
-/usr/bin/make -j8
+/usr/bin/make $emtools_kernproc
 /usr/bin/make modules_install
 
 # Install kernel to /boot
@@ -21,8 +23,9 @@ cd /usr/src/linux
 # Update the grub
 /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
 
-# Backup /boot to /mnt/boot-backup
-/usr/bin/rsync -av /boot/ /mnt/boot-backup/
+# Backup /boot to $emtools_bootbak
+if [ -z "$emtools_bootbak" ];
+/usr/bin/rsync -av /boot/ $emtools_bootbak
 
 # Rebuild other modules
 emerge @module-rebuild
