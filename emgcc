@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# emgcc v1.0.0
+# Used when a major version bump is available to sys-devel/gcc.
+# Essentially just a bash compilation of the instructions at https://wiki.gentoo.org/wiki/Upgrading_GCC
+# Currently just a list to remind me of the steps, it does not automate anything
+
+exit
+
+/usr/bin/emerge --ask --oneshot sys-devel/gcc
+
+gcc-config --list-profiles
+echo "Run 'gcc-config x', where x is the new version."
+
+source /etc/profile
+emerge --oneshot --usepkg=n sys-devel/libtool
+
+gcc --version
+emerge --ask --depclean
+
+emerge --emptytree --usepkg=n @system
+emerge --emptytree --usepkg=n @world
+
