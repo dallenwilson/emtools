@@ -1,5 +1,8 @@
 #!/bin/bash 
 
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
 # emtidy v1.0.0
 # Lists packages that can be removed from the world file.
 # Also uses eix to list packages that can be uninstalled.

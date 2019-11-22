@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
 # emmakekernel v1.0.0
 # Used to build a new kernel and all associated steps in installing it,
 # as well as rebuilding any installed modules.

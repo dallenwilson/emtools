@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
 # emwhen v1.0.0
 # Displays the date and time of the last sync of the main gentoo repo.
 

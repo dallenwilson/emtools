@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
 # emgcc v1.0.0
 # Used when a major version bump is available to sys-devel/gcc.
 # Essentially just a bash compilation of the instructions at https://wiki.gentoo.org/wiki/Upgrading_GCC

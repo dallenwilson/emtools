@@ -1,11 +1,16 @@
 #!/bin/bash
 
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
 # emupdate v1.0.0
 # To be used after emsync. Updates the system and cleans up the mess.
 
-
+# This was used to allow installed packages that are no longer in tree to stay installed without causing annoying warnings.
+# Leaving here for reference in case I need it again.
 #source /etc/portage/package.excludes
-#/usr/bin/emerge --exclude "$NOTOUCH" --update --ask --deep --newuse --keep-going --changed-use @world
+#/usr/bin/emerge --exclude "$NOTOUCH" --backtrack=100 --ask --changed-deps --update --deep --newuse --keep-going --changed-use @world
+
 /usr/bin/emerge --backtrack=100 --ask --changed-deps --update --deep --newuse --changed-use --keep-going @world
 
 /usr/bin/emerge @preserved-rebuild

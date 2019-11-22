@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
 # emfetch v1.0.0
 # Used to pre-fetch the distfiles for any updates that emupdate would like to apply. 
+# My internet connection is pretty spotty. --fetchonly seems to have a much higher success rate vs downloading each source package as emupdate reaches it.
 
 /usr/bin/emerge --backtrack=100 --fetchonly --changed-deps --update --deep --newuse --changed-use --keep-going @world
 
