@@ -27,8 +27,10 @@ cd /usr/src/linux
 /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
 
 # Backup /boot to $emtools_bootbak
-if [ -z "$emtools_bootbak" ];
-/usr/bin/rsync -av /boot/ $emtools_bootbak
+if [ -z "$emtools_bootbak" ]; then
+	/usr/bin/rsync -av /boot/ $emtools_bootbak
+
+fi
 
 # Rebuild other modules
 emerge @module-rebuild
