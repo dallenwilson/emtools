@@ -26,8 +26,8 @@ cd /usr/src/linux
 # Update the grub
 /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
 
-# Backup /boot to $emtools_bootbak
-if [ -z "$emtools_bootbak" ]; then
+# Backup /boot to $emtools_bootbak if it is set
+if [ ! -z "$emtools_bootbak" ]; then
 	/usr/bin/rsync -av /boot/ $emtools_bootbak
 
 fi
