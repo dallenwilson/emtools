@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Copyright 2019 Dallen Wilson
+# Distributed under the terms of the GNU General Public License v3
+
+# emclean v1.0.0
+# Clean up old distfiles.
+
+/usr/bin/eclean-dist --deep
+

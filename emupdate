@@ -13,7 +13,7 @@
 
 /usr/bin/emerge --backtrack=100 --ask --changed-deps --update --deep --newuse --changed-use --keep-going @world
 
-/usr/bin/emerge @preserved-rebuild
-/usr/bin/emerge --ask --depclean
-/usr/bin/eclean-dist --deep
-
+if [ "$?" == 0 ]; then
+	/usr/bin/emerge @preserved-rebuild
+	/usr/bin/emerge --ask --depclean
+fi
