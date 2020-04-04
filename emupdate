@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Copyright 2019 Dallen Wilson
+# Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emupdate v1.0.0
+# emupdate v1.1.0
 # To be used after emsync. Updates the system and cleans up the mess.
 
 # This was used to allow installed packages that are no longer in tree to stay installed without causing annoying warnings.
@@ -11,9 +11,35 @@
 #source /etc/portage/package.excludes
 #/usr/bin/emerge --exclude "$NOTOUCH" --backtrack=100 --ask --changed-deps --update --deep --newuse --keep-going --changed-use @world
 
-/usr/bin/emerge --backtrack=100 --ask --changed-deps --update --deep --newuse --changed-use --keep-going @world
+EMOPTS=""
+ASK=1
+
+ARGS=$(getopt -o 'c,b,n' --long 'changed-deps,backtrack,no-ask' -- "$@") || exit
+eval "set -- $ARGS"
+
+while true; do
+	case $1 in
+		(-c|--changed-deps)
+				EMOPTS="${EMOPTS} --changed-deps"; shift;;
+		(-b|--backtrack)
+				EMOPTS="${EMOPTS} --backtrack=100"; shift;;
+		(-n|--no-ask)
+				ASK=0; shift;;
+		(--) 	shift; break;;
+		(*)		break;;
+	esac
+done
+
+if [ "$ASK" == 1 ]; then
+	EMOPTS="${EMOPTS} --ask"
+fi
+
+/usr/bin/emerge $EMOPTS --update --deep --newuse --changed-use --keep-going @world
 
 if [ "$?" == 0 ]; then
 	/usr/bin/emerge @preserved-rebuild
 	/usr/bin/emerge --ask --depclean
+	/usr/bin/eclean-dist --deep
+else
+	/usr/bin/eclean-dist
 fi

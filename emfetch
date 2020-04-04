@@ -1,11 +1,34 @@
 #!/bin/bash
 
-# Copyright 2019 Dallen Wilson
+# Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emfetch v1.0.0
+# emfetch v1.1.0
 # Used to pre-fetch the distfiles for any updates that emupdate would like to apply. 
 # My internet connection is pretty spotty. --fetchonly seems to have a much higher success rate vs downloading each source package as emupdate reaches it.
 
-/usr/bin/emerge --backtrack=100 --fetchonly --changed-deps --update --deep --newuse --changed-use --keep-going @world
+EMOPTS=""
+ASK=1
+
+ARGS=$(getopt -o 'c,b,n' --long 'changed-deps,backtrack,no-ask' -- "$@") || exit
+eval "set -- $ARGS"
+
+while true; do
+    case $1 in
+        (-c|--changed-deps)
+                EMOPTS="${EMOPTS} --changed-deps"; shift;;
+        (-b|--backtrack)
+                EMOPTS="${EMOPTS} --backtrack=100"; shift;;
+        (-n|--no-ask)
+                ASK=0; shift;;
+        (--)    shift; break;;
+        (*)     break;;
+    esac
+done
+
+if [ "$ASK" == 1 ]; then
+    EMOPTS="${EMOPTS} --ask"
+fi
+
+/usr/bin/emerge --fetchonly $EMOPTS --update --deep --newuse --changed-use --keep-going @world
 

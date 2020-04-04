@@ -1,27 +1,34 @@
 #!/bin/bash
 
-# Copyright 2019 Dallen Wilson
+# Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emmakekernel v1.0.0
+# emmakekernel v1.1.0
 # Used to build a new kernel and all associated steps in installing it,
 # as well as rebuilding any installed modules.
 
 source /etc/emtools.conf
 
+if [ "$emtools_firmware" != "" ]; then
+	emerge --update $emtools_firmware
+fi
+
 # Move to kernel source
 cd /usr/src/linux
 
 # Make kernel and modules
-/usr/bin/make modules_prepare
+
+/usr/bin/make $emtools_kernproc modules_prepare
 /usr/bin/make $emtools_kernproc
-/usr/bin/make modules_install
+/usr/bin/make $emtools_kernproc modules_install
 
 # Install kernel to /boot
-/usr/bin/make install
+/usr/bin/make $emtools_kernproc install
 
 # Build initramfs and install to /boot
 /usr/bin/genkernel --install initramfs
+
+#TODO: Delete older kernels from /boot
 
 # Update the grub
 /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
@@ -34,4 +41,4 @@ fi
 
 # Rebuild other modules
 emerge @module-rebuild
-#emerge sys-kernel/linux-firmware
+

@@ -1,12 +1,43 @@
 #!/bin/bash
 
-# Copyright 2019 Dallen Wilson
+# Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emsync v1.0.0
+# emsync v1.1.0
 # Used to sync the main gentoo tree and anything else that's available.
 
-/usr/sbin/emaint sync --auto
-/usr/bin/layman -s ALL
-/usr/bin/eix-update
+GENTOO=0
+OTHER=0
+EIX=0
+
+ARGS=$(getopt -o 'a,g,o,e' --long 'all,gentoo,other,eix' -- "$@") || exit
+eval "set -- $ARGS"
+
+while true; do
+    case $1 in
+		(-a|--all)
+				GENTOO=1; OTHER=1; EIX=1; shift;;
+        (-g|--gentoo)
+                GENTOO=1; shift;;
+        (-o|--other)
+                OTHER=1; shift;;
+        (-e|--eix)
+                EIX=1; shift;;
+        (--)    shift; break;;
+        (*)     break;;
+    esac
+done
+
+if [ "$GENTOO" == 1 ]; then
+    /usr/sbin/emaint -r gentoo sync
+fi
+
+if [ "$OTHER" == 1 ]; then
+	/usr/sbin/emaint -r science sync
+	/usr/bin/layman -S
+fi
+
+if [ "$EIX" == 1 ]; then
+	/usr/bin/eix-update
+fi
 
