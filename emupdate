@@ -3,7 +3,9 @@
 # Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emupdate v1.1.0
+# emupdate v1.1.1
+VERSION="v1.1.1"
+
 # To be used after emsync. Updates the system and cleans up the mess.
 
 # This was used to allow installed packages that are no longer in tree to stay installed without causing annoying warnings.
@@ -14,7 +16,7 @@
 EMOPTS=""
 ASK=1
 
-ARGS=$(getopt -o 'c,b,n' --long 'changed-deps,backtrack,no-ask' -- "$@") || exit
+ARGS=$(getopt -o 'c,b,n,v,h' --long 'changed-deps,backtrack,no-ask,version,help' -- "$@") || exit
 eval "set -- $ARGS"
 
 while true; do
@@ -25,6 +27,17 @@ while true; do
 				EMOPTS="${EMOPTS} --backtrack=100"; shift;;
 		(-n|--no-ask)
 				ASK=0; shift;;
+		(-v|--version)
+				echo "emupdate ${VERSION}"; exit;;
+		(-h|--help)
+				echo "emupdate ${VERSION}"
+				echo ""
+				echo "-c,--changed-deps:	Add --changed-deps to emerge call."
+				echo "-b,--backtrack:		Add --backtrack=100 to emerge call."
+				echo "-n,--no-ask:		Do not add --ask to emerge call."
+				echo "-v,--version:		Print version and exit."
+				echo "-h,--help:		Print this message and exit."
+				exit;;
 		(--) 	shift; break;;
 		(*)		break;;
 	esac

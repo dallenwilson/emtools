@@ -3,14 +3,16 @@
 # Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emfetch v1.1.0
+# emfetch v1.1.1
+VERSION="v1.1.1"
+
 # Used to pre-fetch the distfiles for any updates that emupdate would like to apply. 
 # My internet connection is pretty spotty. --fetchonly seems to have a much higher success rate vs downloading each source package as emupdate reaches it.
 
 EMOPTS=""
 ASK=1
 
-ARGS=$(getopt -o 'c,b,n' --long 'changed-deps,backtrack,no-ask' -- "$@") || exit
+ARGS=$(getopt -o 'c,b,n,v,h' --long 'changed-deps,backtrack,no-ask,version,help' -- "$@") || exit
 eval "set -- $ARGS"
 
 while true; do
@@ -21,7 +23,18 @@ while true; do
                 EMOPTS="${EMOPTS} --backtrack=100"; shift;;
         (-n|--no-ask)
                 ASK=0; shift;;
-        (--)    shift; break;;
+        (-v|--version)
+                echo "emfetch ${VERSION}"; exit;;
+        (-h|--help)
+                echo "emfetch ${VERSION}"
+                echo ""
+                echo "-c,--changed-deps:	Add --changed-deps to emerge call."
+                echo "-b,--backtrack:		Add --backtrack=100 to emerge call."
+                echo "-n,--no-ask:      	Do not add --ask to emerge call."
+                echo "-v,--version:     	Print version and exit."
+                echo "-h,--help:        	Print this message and exit."
+                exit;;
+		(--)    shift; break;;
         (*)     break;;
     esac
 done

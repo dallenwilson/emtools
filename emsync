@@ -3,14 +3,16 @@
 # Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emsync v1.1.0
+# emsync v1.1.1
+VERSION="v1.1.1"
+
 # Used to sync the main gentoo tree and anything else that's available.
 
 GENTOO=0
 OTHER=0
 EIX=0
 
-ARGS=$(getopt -o 'a,g,o,e' --long 'all,gentoo,other,eix' -- "$@") || exit
+ARGS=$(getopt -o 'a,g,o,e,v,h' --long 'all,gentoo,other,eix,version,help' -- "$@") || exit
 eval "set -- $ARGS"
 
 while true; do
@@ -23,10 +25,28 @@ while true; do
                 OTHER=1; shift;;
         (-e|--eix)
                 EIX=1; shift;;
+		(-v|--version)
+				echo "emsync ${VERSION}"; exit;;
+		(-h|--help)
+				echo "emsync ${VERSION}"
+				echo ""
+				echo "-a,--all:	Sync gentoo, layman, and update eix db."
+				echo "-g,--gentoo:	Sync gentoo repo."
+				echo "-o,--other:	Sync other repos (including layman)."
+				echo "-e,--eix:	Update eix database."
+				echo "-v,--version:	Print version and exit."
+				echo "-h,--help:	Print this message and exit."
+				exit;;
         (--)    shift; break;;
         (*)     break;;
     esac
 done
+
+if [ "$GENTOO" == 0 ] && [ "$OTHER" == 0 ] && [ "$EIX" == 0 ]; then
+	GENTOO=1
+	OTHER=1
+	EIX=1
+fi
 
 if [ "$GENTOO" == 1 ]; then
     /usr/sbin/emaint -r gentoo sync
