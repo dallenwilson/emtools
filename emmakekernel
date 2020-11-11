@@ -3,14 +3,19 @@
 # Copyright 2019-2020 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emmakekernel v1.1.1
+# emmakekernel v1.2.1
 # Used to build a new kernel and all associated steps in installing it,
 # as well as rebuilding any installed modules.
 
 source /etc/emtools.conf
 
+if ! grep -qs '/boot ' /proc/mounts; then
+	echo "/boot must be mounted!"
+	exit
+fi
+
 if [ "$emtools_firmware" != "" ]; then
-	emerge --update $emtools_firmware
+	emerge --update ${emtools_firmware}
 fi
 
 # Move to kernel source
@@ -18,16 +23,16 @@ cd /usr/src/linux
 
 # Make kernel and modules
 
-/usr/bin/make $emtools_kernproc prepare
-/usr/bin/make $emtools_kernproc modules_prepare
-/usr/bin/make $emtools_kernproc
-/usr/bin/make $emtools_kernproc modules_install
+/usr/bin/make ${emtools_kernproc} prepare
+/usr/bin/make ${emtools_kernproc} modules_prepare
+/usr/bin/make ${emtools_kernproc}
+/usr/bin/make ${emtools_kernproc} modules_install
 
 # Install kernel to /boot
-/usr/bin/make $emtools_kernproc install
+/usr/bin/make ${emtools_kernproc} install
 
 # Build initramfs and install to /boot
-/usr/bin/genkernel --install initramfs
+/usr/bin/genkernel ${emtools_genkernel} --install initramfs
 
 #TODO: Delete older kernels from /boot
 
@@ -36,10 +41,10 @@ cd /usr/src/linux
 
 # Backup /boot to $emtools_bootbak if it is set
 if [ ! -z "$emtools_bootbak" ]; then
-	/usr/bin/rsync -av /boot/ $emtools_bootbak
+	/usr/bin/rsync -av /boot/ ${emtools_bootbak}
 
 fi
 
 # Rebuild other modules
-emerge @module-rebuild
+emerge --keep-going @module-rebuild
 
