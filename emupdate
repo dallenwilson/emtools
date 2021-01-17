@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Copyright 2019-2020 Dallen Wilson
+# Copyright 2019-2021 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emupdate v1.1.2
-VERSION="v1.1.2"
+# emupdate v1.1.3
+VERSION="v1.1.3"
 
 # To be used after emsync. Updates the system and cleans up the mess.
 
@@ -47,7 +47,7 @@ if [ "$ASK" == 1 ]; then
 	EMOPTS="${EMOPTS} --ask"
 fi
 
-/usr/bin/emerge $EMOPTS --update --deep --newuse --keep-going @world
+/usr/bin/emerge $EMOPTS --update --deep --changed-use --keep-going @world
 
 if [ "$?" == 0 ]; then
 	/usr/bin/emerge @preserved-rebuild

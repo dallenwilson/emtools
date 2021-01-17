@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Copyright 2019-2020 Dallen Wilson
+# Copyright 2019-2021 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emfetch v1.1.1
-VERSION="v1.1.1"
+# emfetch v1.1.2
+VERSION="v1.1.2"
 
 # Used to pre-fetch the distfiles for any updates that emupdate would like to apply. 
 # My internet connection is pretty spotty. --fetchonly seems to have a much higher success rate vs downloading each source package as emupdate reaches it.
@@ -43,5 +43,5 @@ if [ "$ASK" == 1 ]; then
     EMOPTS="${EMOPTS} --ask"
 fi
 
-/usr/bin/emerge --fetchonly $EMOPTS --update --deep --newuse --changed-use --keep-going @world
+/usr/bin/emerge --fetchonly $EMOPTS --update --deep --changed-use --keep-going @world
 
