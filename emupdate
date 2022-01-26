@@ -3,8 +3,8 @@
 # Copyright 2019-2021 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emupdate v1.1.3
-VERSION="v1.1.3"
+# emupdate v1.1.4
+VERSION="v1.1.4"
 
 # To be used after emsync. Updates the system and cleans up the mess.
 
@@ -47,6 +47,11 @@ if [ "$ASK" == 1 ]; then
 	EMOPTS="${EMOPTS} --ask"
 fi
 
+if [ -e "/etc/init.d/boinc" ]; then
+	echo "Stopping boinc"
+	/sbin/rc-service boinc stop > /dev/null  2>&1 &
+fi
+
 /usr/bin/emerge $EMOPTS --update --deep --changed-use --keep-going @world
 
 if [ "$?" == 0 ]; then
@@ -56,3 +61,9 @@ if [ "$?" == 0 ]; then
 else
 	/usr/bin/eclean-dist
 fi
+
+if [ -e "/etc/init.d/boinc" ]; then
+    echo "Re-starting boinc"
+    /sbin/rc-service boinc start > /dev/null  2>&1 &
+fi
+
