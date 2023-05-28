@@ -3,8 +3,7 @@
 # Copyright 2019-2021 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emupdate v1.1.4
-VERSION="v1.1.4"
+VERSION="v1.1.5"
 
 # To be used after emsync. Updates the system and cleans up the mess.
 
@@ -24,7 +23,7 @@ while true; do
 		(-c|--changed-deps)
 				EMOPTS="${EMOPTS} --changed-deps"; shift;;
 		(-b|--backtrack)
-				EMOPTS="${EMOPTS} --backtrack=100"; shift;;
+				EMOPTS="${EMOPTS} --backtrack=1000"; shift;;
 		(-n|--no-ask)
 				ASK=0; shift;;
 		(-v|--version)
@@ -33,7 +32,7 @@ while true; do
 				echo "emupdate ${VERSION}"
 				echo ""
 				echo "-c,--changed-deps:	Add --changed-deps to emerge call."
-				echo "-b,--backtrack:		Add --backtrack=100 to emerge call."
+				echo "-b,--backtrack:		Add --backtrack=1000 to emerge call."
 				echo "-n,--no-ask:		Do not add --ask to emerge call."
 				echo "-v,--version:		Print version and exit."
 				echo "-h,--help:		Print this message and exit."

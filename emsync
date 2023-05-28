@@ -3,36 +3,30 @@
 # Copyright 2019-2021 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emsync v1.1.1
-VERSION="v1.1.1"
+VERSION="v1.1.3"
 
 # Used to sync the main gentoo tree and anything else that's available.
+# The utility of this script was much greater before eselect-repository was a thing.
+# It's a bit superfluous now.
 
-GENTOO=0
-OTHER=0
+SYNC=0
 EIX=0
 
-ARGS=$(getopt -o 'a,g,o,e,v,h' --long 'all,gentoo,other,eix,version,help' -- "$@") || exit
+ARGS=$(getopt -o 'a,e,v,h' --long 'all,eix,version,help' -- "$@") || exit
 eval "set -- $ARGS"
 
 while true; do
     case $1 in
 		(-a|--all)
-				GENTOO=1; OTHER=1; EIX=1; shift;;
-        (-g|--gentoo)
-                GENTOO=1; shift;;
-        (-o|--other)
-                OTHER=1; shift;;
-        (-e|--eix)
+				SYNC=1; EIX=1; shift;;        
+		(-e|--eix)
                 EIX=1; shift;;
 		(-v|--version)
 				echo "emsync ${VERSION}"; exit;;
 		(-h|--help)
 				echo "emsync ${VERSION}"
 				echo ""
-				echo "-a,--all:	Sync gentoo, layman, and update eix db."
-				echo "-g,--gentoo:	Sync gentoo repo."
-				echo "-o,--other:	Sync other repos (including layman)."
+				echo "-a,--all:	Sync all repos, and update eix db."
 				echo "-e,--eix:	Update eix database."
 				echo "-v,--version:	Print version and exit."
 				echo "-h,--help:	Print this message and exit."
@@ -42,22 +36,17 @@ while true; do
     esac
 done
 
-if [ "$GENTOO" == 0 ] && [ "$OTHER" == 0 ] && [ "$EIX" == 0 ]; then
-	GENTOO=1
-	OTHER=1
+if [ "$SYNC" == 0 ] && [ "$EIX" == 0 ]; then
+	SYNC=1
 	EIX=1
 fi
 
-if [ "$GENTOO" == 1 ]; then
-    /usr/sbin/emaint -r gentoo sync
-fi
-
-if [ "$OTHER" == 1 ]; then
-	/usr/sbin/emaint -r science sync
-	/usr/bin/layman -S
+if [ "$SYNC" == 1 ]; then
+	/usr/sbin/emaint -A sync
 fi
 
 if [ "$EIX" == 1 ]; then
+	mv /var/cache/eix/portage.eix /var/cache/eix/previous.eix
 	/usr/bin/eix-update
 fi
 
