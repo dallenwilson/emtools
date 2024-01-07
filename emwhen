@@ -3,12 +3,17 @@
 # Copyright 2019-2021 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emwhen v1.0.1
+# emwhen v1.0.2
 # Displays the date and time of the last sync of the main gentoo repo.
 
-EMWHERE="/usr/portage/metadata/timestamp"
+EMWHERE="/var/db/repos/gentoo/metadata/timestamp.chk"
 if [[ ! -f "$EMWHERE" ]]; then
 	EMWHERE="/var/db/repos/gentoo/metadata/timestamp"
+fi
+
+if [[ ! -f "$EMWHERE" ]]; then
+	echo "Unable to locate gentoo repo timestamp."
+	exit 1
 fi
 
 date -r "$EMWHERE"
