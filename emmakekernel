@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Copyright 2019-2021 Dallen Wilson
+# Copyright 2019-2025 Dallen Wilson
 # Distributed under the terms of the GNU General Public License v3
 
-# emmakekernel v1.2.2
+# emmakekernel v1.2.3
 # Used to build a new kernel and all associated steps in installing it,
 # as well as rebuilding any installed modules.
 
@@ -31,15 +31,7 @@ cd /usr/src/linux
 # Install kernel to /boot
 /usr/bin/make ${emtools_kernproc} install
 
-# Build initramfs and install to /boot, if needed
-if [ "${emtools_usegenkernel}" != "" ]; then
-	/usr/bin/genkernel ${emtools_genkernel} --install initramfs
-fi
-
 #TODO: Delete older kernels from /boot
-
-# Update the grub
-/usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
 
 # Backup /boot to $emtools_bootbak if it is set
 if [ ! -z "$emtools_bootbak" ]; then
